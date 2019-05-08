@@ -17,5 +17,7 @@ namespace Universal_Learning
 	public:
 		MainPage();
 
+	private:
+		void SendBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

@@ -25,3 +25,9 @@ MainPage::MainPage()
 {
 	InitializeComponent();
 }
+
+
+void Universal_Learning::MainPage::SendBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	this->urlTextBox->SelectedText = "Hello World";
+}

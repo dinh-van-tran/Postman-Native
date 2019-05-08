@@ -9,6 +9,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Button x:Name="sendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="83,141,0,0" Width="83" Click="SendBtn_Click"/>
+        <TextBox x:Name="urlTextBox" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" Margin="226,141,0,0" Height="28" Width="358"/>
 
     </Grid>
 </Page>
