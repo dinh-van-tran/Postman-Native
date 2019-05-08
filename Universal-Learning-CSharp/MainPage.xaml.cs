@@ -34,17 +34,17 @@ namespace Universal_Learning_CSharp
         private async void sendButtonClick(object sender, RoutedEventArgs e)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (var child in this.queryParamPanel.Children)
-            {
-                var param = (QueryParam)child;
-                var queryString = param.QueryString;
-                if (queryString == "")
-                {
-                    continue;
-                }
+            //foreach (var child in this.queryParamPanel.Children)
+            //{
+            //    var param = (ParamItem)child;
+            //    var queryString = param.QueryString;
+            //    if (queryString == "")
+            //    {
+            //        continue;
+            //    }
 
-                builder.Append(param.QueryString).Append("&");
-            }
+            //    builder.Append(param.QueryString).Append("&");
+            //}
             if (builder.Length > 0)
             {
                 builder.Length--;
@@ -86,7 +86,7 @@ namespace Universal_Learning_CSharp
 
         private void AddQueryParamButton_Click(object sender, RoutedEventArgs e)
         {
-            this.queryParamPanel.Children.Add(new QueryParam());
+            this.queryParamPanel.Children.Add(new ParamItem());
         }
     }
 }

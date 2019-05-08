@@ -17,35 +17,22 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Universal_Learning_CSharp
 {
-    public sealed partial class QueryParam : UserControl
+    public sealed partial class ParamItem : UserControl
     {
-        public QueryParam()
+        public ParamItem()
         {
             this.InitializeComponent();
         }
 
-        public string QueryName {
+        public string ParamName {
             get { return this.Name.Text; }
             set { this.Name.Text = value; }
         }
 
-        public string QueryValue
+        public string ParamValue
         {
             get { return this.Value.Text; }
             set { this.Value.Text = value; }
-        }
-
-        public string QueryString
-        {
-            get
-            {
-                if (this.Name.Text == "")
-                {
-                    return "";
-                }
-
-                return string.Format("{0}={1}", this.Name.Text, this.Value.Text);
-            }
         }
     }
 }

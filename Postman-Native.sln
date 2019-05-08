@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Universal-Learning", "Universal-Learning\Universal-Learning.vcxproj", "{BC6492FB-D10D-40F6-8D04-D4EB9F2CD2BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universal-Learning-CSharp", "Universal-Learning-CSharp\Universal-Learning-CSharp.csproj", "{32EB9C0F-0D9B-455E-9375-788A65B3BBC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postman-error", "Universal-Learning-CSharp\Postman-error.csproj", "{32EB9C0F-0D9B-455E-9375-788A65B3BBC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postman", "Postman\Postman.csproj", "{65257C12-1437-4479-A743-D6FCD6035F0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,30 @@ Global
 		{32EB9C0F-0D9B-455E-9375-788A65B3BBC2}.Release|x86.ActiveCfg = Release|x86
 		{32EB9C0F-0D9B-455E-9375-788A65B3BBC2}.Release|x86.Build.0 = Release|x86
 		{32EB9C0F-0D9B-455E-9375-788A65B3BBC2}.Release|x86.Deploy.0 = Release|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM.Build.0 = Debug|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM.Deploy.0 = Debug|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM64.Build.0 = Debug|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x64.ActiveCfg = Debug|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x64.Build.0 = Debug|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x64.Deploy.0 = Debug|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x86.ActiveCfg = Debug|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x86.Build.0 = Debug|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Debug|x86.Deploy.0 = Debug|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM.ActiveCfg = Release|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM.Build.0 = Release|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM.Deploy.0 = Release|ARM
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM64.ActiveCfg = Release|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM64.Build.0 = Release|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|ARM64.Deploy.0 = Release|ARM64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x64.ActiveCfg = Release|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x64.Build.0 = Release|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x64.Deploy.0 = Release|x64
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x86.ActiveCfg = Release|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x86.Build.0 = Release|x86
+		{65257C12-1437-4479-A743-D6FCD6035F0A}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
