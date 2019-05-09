@@ -1,0 +1,21 @@
+﻿<UserControl
+    x:Class="Postman.RequestItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Postman"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="40"
+    d:DesignWidth="400">
+
+    <Grid Tapped="Grid_Tapped" PointerPressed="Grid_PointerPressed">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBox Grid.Column="0" x:Name="idTextBox" HorizontalAlignment="Stretch" Text="" VerticalAlignment="Center" Margin="5,5,2,5" IsReadOnly="True" Tapped="IdTextBox_Tapped" PointerPressed="IdTextBox_PointerPressed"/>
+        <TextBox Grid.Column="1" x:Name="nameTextBox" HorizontalAlignment="Stretch" Text="" VerticalAlignment="Center" Margin="2,5,5,5" IsReadOnly="True" Tapped="NameTextBox_Tapped" PointerPressed="NameTextBox_PointerPressed" GotFocus="NameTextBox_GotFocus" />
+    </Grid>
+</UserControl>

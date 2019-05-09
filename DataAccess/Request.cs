@@ -4,10 +4,11 @@ namespace DataAccessLibrary
 {
     public class Request
     {
-        private readonly int id;
+        private int id;
         public int Id
         {
             get { return id; }
+            set { id = value; }
         }
 
         private string method;
@@ -40,7 +41,7 @@ namespace DataAccessLibrary
 
         public Request()
         {
-
+            this.id = -1;
         }
 
         public Request(string method, string url)

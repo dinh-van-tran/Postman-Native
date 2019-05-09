@@ -19,12 +19,9 @@ using DataAccessLibrary;
 
 namespace Postman
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
-        private int id = -1;
+        private Request currentRequest;
 
         public MainPage()
         {
@@ -34,37 +31,76 @@ namespace Postman
 
         private void loadData()
         {
+            currentRequest = new Request();
             List<Request> requests = DataAccess.getAllRequest();
             if (requests.Count == 0)
             {
                 return;
             }
 
-            var request = requests[requests.Count - 1];
+            foreach (var request in requests)
+            {
+                RequestItem requestItem = new RequestItem();
+                requestItem.Request = request;
+                requestItem.Panel = this;
+                this.requestPanel.Children.Add(requestItem);
+            }
+
+            this.SetRequestValue(requests[requests.Count - 1]);
+        }
+
+        public void SetRequestValue(Request request)
+        {
+            var url = this.urlTextbox.Text;
+            string method = "GET";
+
+            //switch (methodComboBox.SelectedIndex)
+            //{
+            //    case 0:
+            //        method = "GET";
+            //        break;
+            //    case 1:
+            //        method = "POST";
+            //        break;
+            //    case 2:
+            //        method = "PUT";
+            //        break;
+            //    case 3:
+            //        method = "DELETE";
+            //        break;
+            //    default:
+            //        method = "GET";
+            //        break;
+            //}
+
+            this.currentRequest.Method = method;
+            this.currentRequest.Url = url;
+            this.currentRequest.QueryParameters = this.queryParamPanel.Value;
+
+            currentRequest = request;
 
             this.urlTextbox.Text = request.Url;
 
-            switch (request.Method)
-            {
-                case "GET":
-                    this.methodComboBox.SelectedIndex = 0;
-                    break;
-                case "POST":
-                    this.methodComboBox.SelectedIndex = 1;
-                    break;
-                case "PUT":
-                    this.methodComboBox.SelectedIndex = 2;
-                    break;
-                case "DELETE":
-                    this.methodComboBox.SelectedIndex = 3;
-                    break;
-                default:
-                    this.methodComboBox.SelectedIndex = 0;
-                    break;
-            }
+            //switch (request.Method)
+            //{
+            //    case "GET":
+            //        this.methodComboBox.SelectedIndex = 0;
+            //        break;
+            //    case "POST":
+            //        this.methodComboBox.SelectedIndex = 1;
+            //        break;
+            //    case "PUT":
+            //        this.methodComboBox.SelectedIndex = 2;
+            //        break;
+            //    case "DELETE":
+            //        this.methodComboBox.SelectedIndex = 3;
+            //        break;
+            //    default:
+            //        this.methodComboBox.SelectedIndex = 0;
+            //        break;
+            //}
 
             this.queryParamPanel.Value = request.QueryParameters;
-            this.id = request.Id;
         }
 
         private void sendButtonClick(object sender, RoutedEventArgs e)
@@ -82,42 +118,69 @@ namespace Postman
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.saveData();
+            this.saveRequest();
         }
 
-        private void saveData()
+        private void saveRequest()
         {
             var url = this.urlTextbox.Text;
             string method = "GET";
 
-            switch (methodComboBox.SelectedIndex)
-            {
-                case 0:
-                    method = "GET";
-                    break;
-                case 1:
-                    method = "POST";
-                    break;
-                case 2:
-                    method = "PUT";
-                    break;
-                case 3:
-                    method = "DELETE";
-                    break;
-                default:
-                    method = "GET";
-                    break;
+            //switch (methodComboBox.SelectedIndex)
+            //{
+            //    case 0:
+            //        method = "GET";
+            //        break;
+            //    case 1:
+            //        method = "POST";
+            //        break;
+            //    case 2:
+            //        method = "PUT";
+            //        break;
+            //    case 3:
+            //        method = "DELETE";
+            //        break;
+            //    default:
+            //        method = "GET";
+            //        break;
+            //}
+
+            if (this.currentRequest == null) {
+                this.currentRequest = new Request();
             }
 
-            var request = new Request(this.id, method, url);
-            request.QueryParameters = this.queryParamPanel.Value;
+            this.currentRequest.Method = method;
+            this.currentRequest.Url = url;
+            this.currentRequest.QueryParameters = this.queryParamPanel.Value;
 
-            DataAccess.saveRequest(request);
+            int id = DataAccess.saveRequest(this.currentRequest);
+
+            if (this.currentRequest.Id == -1)
+            {
+                this.currentRequest.Id = id;
+                RequestItem requestItem = new RequestItem();
+                requestItem.Request = this.currentRequest;
+                requestItem.Panel = this;
+                this.requestPanel.Children.Add(requestItem);
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             this.loadData();
+        }
+
+        private void NewRequestButton_Click(object sender, RoutedEventArgs e)
+        {
+            clearRequest();
+            currentRequest = new Request();
+        }
+
+        private void clearRequest()
+        {
+            this.urlTextbox.Text = "";
+            //this.methodComboBox.SelectedIndex = 0;
+            this.queryParamPanel.Value = new List<Parameter>();
         }
     }
 }
