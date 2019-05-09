@@ -6,11 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
     <Grid>
         <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="945,32,0,0" RenderTransformOrigin="0.579,1.865" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
         <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="274,32,0,0" Height="32" Width="652"/>
-        <TextBox x:Name="responseBodyTextBox" HorizontalAlignment="Left" Height="196" Margin="292,518,0,0" Text="" VerticalAlignment="Top" Width="652" IsReadOnly="True"/>
+        <TextBox x:Name="responseBodyTextBox" HorizontalAlignment="Left" Height="196" Margin="274,0,0,0" Text="" VerticalAlignment="Center" Width="652" IsReadOnly="True"/>
         <ComboBox x:Name="methodComboBox" HorizontalAlignment="Left" Margin="181,32,0,0" VerticalAlignment="Top" SelectedIndex="0" Width="89" Background="{x:Null}">
             <ComboBoxItem Content="GET"/>
             <ComboBoxItem Content="POST"/>
@@ -20,12 +20,13 @@
 
         <Pivot HorizontalAlignment="Left" Width="652" Height="300" Margin="274,88,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
             <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <local:ParamPanel Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
+                <local:ParamPanel x:Name="queryParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
             </PivotItem>
-            <PivotItem Header="Headers">
-                <Grid/>
+            <PivotItem Header="Headers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <local:ParamPanel x:Name="headerParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
             </PivotItem>
         </Pivot>
+        <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="1031,32,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
 
     </Grid>
 </Page>

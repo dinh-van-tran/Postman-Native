@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using DataAccessLibrary;
+
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Postman
@@ -57,13 +59,13 @@ namespace Postman
             set { this.deleteButton.Visibility = value; }
         }
 
-        public Param Value
+        public Parameter Value
         {
-            get { return new Param(this.paramName.Text, this.paramValue.Text); }
+            get { return new Parameter(this.paramName.Text, this.paramValue.Text); }
             set
             {
-                this.paramName.Text = value.Name;
-                this.paramValue.Text = value.Value;
+                this.paramName.Text = value.Name.Trim();
+                this.paramValue.Text = value.Value.Trim();
             }
         }
 

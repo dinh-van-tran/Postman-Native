@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,11 +26,11 @@ namespace Postman
             this.AddItem(0);
         }
 
-        public List<Param> Value
+        public List<Parameter> Value
         {
             get
             {
-                List<Param> result = new List<Param>();
+                List<Parameter> result = new List<Parameter>();
                 var children = this.panel.Children;
                 for (int i = 0; i < children.Count; i++)
                 {
@@ -46,6 +47,7 @@ namespace Postman
                 children.Clear();
                 if (value.Count == 0)
                 {
+                    this.AddItem(0);
                     return;
                 }
 
