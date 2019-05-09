@@ -17,13 +17,10 @@
             <ComboBoxItem Content="PUT"/>
             <ComboBoxItem Content="DELETE"/>
         </ComboBox>
-        <Button x:Name="addQueryParamButton" Content="Add Param" HorizontalAlignment="Left" Height="41" Margin="944,88,0,0" VerticalAlignment="Top" Width="82"/>
 
-        <Pivot HorizontalAlignment="Left" Width="652" Height="266" Margin="274,88,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
+        <Pivot HorizontalAlignment="Left" Width="652" Height="300" Margin="274,88,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
             <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <ScrollViewer HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Center" Height="175" BorderThickness="2,2,2,2" BorderBrush="Black">
-                    <StackPanel x:Name="queryParamPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" />
-                </ScrollViewer>
+                <local:ParamPanel Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
             </PivotItem>
             <PivotItem Header="Headers">
                 <Grid/>

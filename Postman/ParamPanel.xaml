@@ -10,8 +10,8 @@
     d:DesignWidth="400">
 
     <ScrollViewer>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-            <local:ParamItem />
+        <StackPanel x:Name="panel"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+ 
         </StackPanel>
     </ScrollViewer>
 </UserControl>

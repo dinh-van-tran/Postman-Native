@@ -22,6 +22,85 @@ namespace Postman
         public ParamPanel()
         {
             this.InitializeComponent();
+            this.AddItem(0);
+        }
+
+        public List<Param> Value
+        {
+            get
+            {
+                List<Param> result = new List<Param>();
+                var children = this.panel.Children;
+                for (int i = 0; i < children.Count; i++)
+                {
+                    var item = (ParamItem)children[i];
+                    result.Add(item.Value);
+                }
+
+                return result;
+            }
+
+            set
+            {
+                var children = this.panel.Children;
+                children.Clear();
+                if (value.Count == 0)
+                {
+                    return;
+                }
+
+                foreach(var param in value)
+                {
+                    ParamItem item = new ParamItem();
+                    item.Value = param;
+                    children.Add(item);
+                }
+
+                indexItem();
+            }
+        }
+
+        public void AddItem(uint index)
+        {
+            var children = this.panel.Children;
+            ParamItem item = new ParamItem();
+            children.Add(item);
+
+            uint count = Convert.ToUInt32(children.Count);
+            if (index != count - 1)
+            {
+                children.Move(count - 1, index);
+            }
+
+            this.indexItem();
+        }
+
+        public void DeleteItem(uint index)
+        {
+            var item = (ParamItem)this.panel.Children[Convert.ToInt32(index)];
+            this.panel.Children.RemoveAt(Convert.ToInt32(index));
+            this.indexItem();
+        }
+
+        private void indexItem()
+        {
+            var children = this.panel.Children;
+            for (int i = 0; i < children.Count; i++)
+            {
+                var temp = (ParamItem)children[i];
+                if (temp.Panel == null)
+                {
+                    temp.Panel = this;
+                }
+                temp.Index = Convert.ToUInt32(i);
+                temp.DeleteButtonVisibility = Visibility.Visible;
+            }
+
+            if (children.Count == 1)
+            {
+                var temp = (ParamItem)children[0];
+                temp.DeleteButtonVisibility = Visibility.Collapsed;
+            }
         }
     }
 }

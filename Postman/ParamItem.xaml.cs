@@ -19,6 +19,54 @@ namespace Postman
 {
     public sealed partial class ParamItem : UserControl
     {
+        private uint index;
+        private WeakReference<ParamPanel> panel;
+
+        public uint Index
+        {
+            get { return index; }
+            set { index = value; }
+        }
+
+        public ParamPanel Panel
+        {
+            get {
+                ParamPanel result;
+                if (panel == null || !panel.TryGetTarget(out result))
+                {
+                    return null;
+                }
+
+                return result;
+            }
+            set {
+                if (panel != null)
+                {
+                    panel.SetTarget(value);
+                }
+                else
+                {
+                    panel = new WeakReference<ParamPanel>(value);
+                }
+            }
+        }
+
+        public Visibility DeleteButtonVisibility
+        {
+            get { return this.deleteButton.Visibility; }
+            set { this.deleteButton.Visibility = value; }
+        }
+
+        public Param Value
+        {
+            get { return new Param(this.paramName.Text, this.paramValue.Text); }
+            set
+            {
+                this.paramName.Text = value.Name;
+                this.paramValue.Text = value.Value;
+            }
+        }
+
         public ParamItem()
         {
             this.InitializeComponent();
@@ -26,12 +74,22 @@ namespace Postman
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.Panel == null)
+            {
+                return;
+            }
 
+            this.Panel.AddItem(index + 1);
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.Panel == null)
+            {
+                return;
+            }
 
+            this.Panel.DeleteItem(index);
         }
     }
 }
