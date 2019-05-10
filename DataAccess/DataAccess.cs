@@ -18,6 +18,7 @@ namespace DataAccessLibrary
 
                 String addRequestTable = "CREATE TABLE IF NOT EXISTS REQUEST(" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL, " +
                     "method VARCHAR(10) NOT NULL, " +
                     "url TEXT NOT NULL" +
                     ");";
@@ -58,17 +59,18 @@ namespace DataAccessLibrary
             {
                 db.Open();
 
-                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, method, url FROM REQUEST;", db);
+                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, name, method, url FROM REQUEST;", db);
 
                 SqliteDataReader query = selectRequestCommand.ExecuteReader();
 
                 while (query.Read())
                 {
                     int id = query.GetInt32(0);
-                    string method = query.GetString(1);
-                    string url = query.GetString(2);
+                    string name = query.GetString(1);
+                    string method = query.GetString(2);
+                    string url = query.GetString(3);
 
-                    var request = new Request(id, method, url);
+                    var request = new Request(id, name, method, url);
                     request.QueryParameters = getQueryParameters(id, db);
                     request.Headers = getHeaders(id, db);
 
@@ -90,18 +92,19 @@ namespace DataAccessLibrary
             {
                 db.Open();
 
-                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, method, url FROM REQUEST WHERE id = " + id + ";", db);
+                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT name, method, url FROM REQUEST WHERE id = " + id + ";", db);
 
                 SqliteDataReader query = selectRequestCommand.ExecuteReader();
 
                 if (query.Read())
                 {
+                    string name = query.GetString(0);
                     string method = query.GetString(1);
                     string url = query.GetString(2);
                     request.QueryParameters = getQueryParameters(id, db);
                     request.Headers = getHeaders(id, db);
 
-                    request = new Request(id, method, url);
+                    request = new Request(id, name, method, url);
                 }
 
                 db.Close();
@@ -135,8 +138,9 @@ namespace DataAccessLibrary
 
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = db;
-                command.CommandText = "INSERT INTO REQUEST(method, url) VALUES(@method, @url);";
+                command.CommandText = "INSERT INTO REQUEST(name, method, url) VALUES(@name, @method, @url);";
 
+                command.Parameters.AddWithValue("@name", request.Name);
                 command.Parameters.AddWithValue("@method", request.Method);
                 command.Parameters.AddWithValue("@url", request.Url);
 
@@ -164,6 +168,7 @@ namespace DataAccessLibrary
                 command.CommandText = "UPDATE REQUEST SET method = @method, url = @url where id = @id;";
 
                 command.Parameters.AddWithValue("@id", request.Id);
+                command.Parameters.AddWithValue("@name", request.Name);
                 command.Parameters.AddWithValue("@method", request.Method);
                 command.Parameters.AddWithValue("@url", request.Url);
 

@@ -53,7 +53,7 @@ namespace Postman
             get { return request; }
             set {
                 request = value;
-                this.nameTextBox.Text = value.Url;
+                this.DataContext = request;
             }
         }
 

@@ -14,8 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DataAccessLibrary;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using Postman.Views.RequestView;
 
 namespace Postman
 {
@@ -52,55 +51,18 @@ namespace Postman
         public void SetRequestValue(Request request)
         {
             var url = this.urlTextbox.Text;
-            string method = "GET";
 
-            //switch (methodComboBox.SelectedIndex)
-            //{
-            //    case 0:
-            //        method = "GET";
-            //        break;
-            //    case 1:
-            //        method = "POST";
-            //        break;
-            //    case 2:
-            //        method = "PUT";
-            //        break;
-            //    case 3:
-            //        method = "DELETE";
-            //        break;
-            //    default:
-            //        method = "GET";
-            //        break;
-            //}
-
-            this.currentRequest.Method = method;
+            this.currentRequest.Method = this.methodControl.Value;
             this.currentRequest.Url = url;
             this.currentRequest.QueryParameters = this.queryParamPanel.Value;
+            this.currentRequest.Headers = this.headerParamPanel.Value;
 
             currentRequest = request;
 
             this.urlTextbox.Text = request.Url;
-
-            //switch (request.Method)
-            //{
-            //    case "GET":
-            //        this.methodComboBox.SelectedIndex = 0;
-            //        break;
-            //    case "POST":
-            //        this.methodComboBox.SelectedIndex = 1;
-            //        break;
-            //    case "PUT":
-            //        this.methodComboBox.SelectedIndex = 2;
-            //        break;
-            //    case "DELETE":
-            //        this.methodComboBox.SelectedIndex = 3;
-            //        break;
-            //    default:
-            //        this.methodComboBox.SelectedIndex = 0;
-            //        break;
-            //}
-
+            this.methodControl.Value = request.Method;
             this.queryParamPanel.Value = request.QueryParameters;
+            this.headerParamPanel.Value = request.Headers;
         }
 
         private void sendButtonClick(object sender, RoutedEventArgs e)
@@ -116,42 +78,30 @@ namespace Postman
             this.responseBodyTextBox.Text = sb.ToString();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.saveRequest();
+            var saveDialog = new SaveRequestDialog(this);
+            var result = await saveDialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
+
+            this.SaveRequest(saveDialog.Text);
         }
 
-        private void saveRequest()
+        public void SaveRequest(string name)
         {
             var url = this.urlTextbox.Text;
-            string method = "GET";
-
-            //switch (methodComboBox.SelectedIndex)
-            //{
-            //    case 0:
-            //        method = "GET";
-            //        break;
-            //    case 1:
-            //        method = "POST";
-            //        break;
-            //    case 2:
-            //        method = "PUT";
-            //        break;
-            //    case 3:
-            //        method = "DELETE";
-            //        break;
-            //    default:
-            //        method = "GET";
-            //        break;
-            //}
-
             if (this.currentRequest == null) {
                 this.currentRequest = new Request();
             }
 
-            this.currentRequest.Method = method;
+            this.currentRequest.Name = name;
+            this.currentRequest.Method = this.methodControl.Value;
             this.currentRequest.Url = url;
             this.currentRequest.QueryParameters = this.queryParamPanel.Value;
+            this.currentRequest.Headers = this.headerParamPanel.Value;
 
             int id = DataAccess.saveRequest(this.currentRequest);
 
@@ -179,7 +129,7 @@ namespace Postman
         private void clearRequest()
         {
             this.urlTextbox.Text = "";
-            //this.methodComboBox.SelectedIndex = 0;
+            this.methodControl.Clear();
             this.queryParamPanel.Value = new List<Parameter>();
         }
     }

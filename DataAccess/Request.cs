@@ -11,6 +11,13 @@ namespace DataAccessLibrary
             set { id = value; }
         }
 
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
         private string method;
         public string Method
         {
@@ -44,16 +51,18 @@ namespace DataAccessLibrary
             this.id = -1;
         }
 
-        public Request(string method, string url)
+        public Request(string name, string method, string url)
         {
             this.id = -1;
+            this.name = name;
             this.method = method;
             this.url = url;
         }
 
-        public Request(int id, string method, string url)
+        public Request(int id, string name, string method, string url)
         {
             this.id = id;
+            this.name = name;
             this.method = method;
             this.url = url;
         }
