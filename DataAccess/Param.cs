@@ -24,7 +24,9 @@
 
         public Parameter()
         {
-
+            this.id = -1;
+            this.name = "";
+            this.value = "";
         }
 
         public Parameter(string name, string value)

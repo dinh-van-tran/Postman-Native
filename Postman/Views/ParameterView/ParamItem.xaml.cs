@@ -24,6 +24,8 @@ namespace Postman
         private uint index;
         private WeakReference<ParamPanel> panel;
 
+        private Parameter parameter;
+
         public uint Index
         {
             get { return index; }
@@ -61,17 +63,21 @@ namespace Postman
 
         public Parameter Value
         {
-            get { return new Parameter(this.paramName.Text, this.paramValue.Text); }
+            get {
+                return this.parameter;
+            }
             set
             {
-                this.paramName.Text = value.Name.Trim();
-                this.paramValue.Text = value.Value.Trim();
+                this.parameter = value;
+                this.DataContext = value;
             }
         }
 
-        public ParamItem()
+        public ParamItem(Parameter param)
         {
             this.InitializeComponent();
+            this.parameter = param;
+            this.DataContext = param;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)

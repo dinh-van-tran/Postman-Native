@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using DataAccessLibrary;
 using Postman.Views.RequestView;
 
@@ -50,17 +40,10 @@ namespace Postman
 
         public void SetRequestValue(Request request)
         {
-            var url = this.urlTextbox.Text;
+            this.currentRequest = request;
+            this.DataContext = request;
 
-            this.currentRequest.Method = this.methodControl.Value;
-            this.currentRequest.Url = url;
-            this.currentRequest.QueryParameters = this.queryParamPanel.Value;
-            this.currentRequest.Headers = this.headerParamPanel.Value;
-
-            currentRequest = request;
-
-            this.urlTextbox.Text = request.Url;
-            this.methodControl.Value = request.Method;
+            this.methodControl.Value = request;
             this.queryParamPanel.Value = request.QueryParameters;
             this.headerParamPanel.Value = request.Headers;
         }
@@ -80,29 +63,24 @@ namespace Postman
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var saveDialog = new SaveRequestDialog(this);
-            var result = await saveDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary)
+            if (this.currentRequest.Name == "")
             {
-                return;
+                var saveDialog = new SaveRequestDialog(this);
+                var result = await saveDialog.ShowAsync();
+                if (result != ContentDialogResult.Primary)
+                {
+                    return;
+                }
+
+                this.currentRequest.Name = saveDialog.Text.Trim();
             }
 
-            this.SaveRequest(saveDialog.Text);
+
+            this.SaveRequest();
         }
 
-        public void SaveRequest(string name)
+        public void SaveRequest()
         {
-            var url = this.urlTextbox.Text;
-            if (this.currentRequest == null) {
-                this.currentRequest = new Request();
-            }
-
-            this.currentRequest.Name = name;
-            this.currentRequest.Method = this.methodControl.Value;
-            this.currentRequest.Url = url;
-            this.currentRequest.QueryParameters = this.queryParamPanel.Value;
-            this.currentRequest.Headers = this.headerParamPanel.Value;
-
             int id = DataAccess.saveRequest(this.currentRequest);
 
             if (this.currentRequest.Id == -1)
@@ -122,15 +100,9 @@ namespace Postman
 
         private void NewRequestButton_Click(object sender, RoutedEventArgs e)
         {
-            clearRequest();
-            currentRequest = new Request();
-        }
-
-        private void clearRequest()
-        {
-            this.urlTextbox.Text = "";
-            this.methodControl.Clear();
-            this.queryParamPanel.Value = new List<Parameter>();
+            this.currentRequest = new Request();
+            this.DataContext = this.currentRequest;
+            this.SetRequestValue(this.currentRequest);
         }
     }
 }

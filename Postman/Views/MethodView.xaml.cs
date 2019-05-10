@@ -1,46 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using DataAccessLibrary;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Postman.Views
 {
     public sealed partial class MethodView : UserControl
     {
-        public string Value
+        private Request request;
+
+        public Request Value
         {
             get
             {
-                switch (this.comboBox.SelectedIndex)
-                {
-                    case 0:
-                        return "GET";
-                    case 1:
-                        return "POST";
-                    case 2:
-                        return "PUT";
-                    case 3:
-                        return "DELETE";
-                    default:
-                        return "GET";
-                }
+                return this.request;
             }
 
             set
             {
-                switch (value)
+                this.request = value;
+                this.DataContext = value;
+                switch (value.Method)
                 {
                     case "GET":
                         this.comboBox.SelectedIndex = 0;
@@ -66,9 +44,33 @@ namespace Postman.Views
             this.InitializeComponent();
         }
 
-        public void Clear()
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.comboBox.SelectedIndex = 0;
+            if (this.request == null)
+            {
+                return;
+            }
+
+            string method = "GET";
+            switch (this.comboBox.SelectedIndex)
+            {
+                case 0:
+                    method = "GET";
+                    break;
+                case 1:
+                    method = "POST";
+                    break;
+                case 2:
+                    method = "PUT";
+                    break;
+                case 3:
+                    method = "DELETE";
+                    break;
+                default:
+                    method = "GET";
+                    break;
+            }
+            this.request.Method = method;
         }
     }
 }

@@ -14,17 +14,19 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Postman
 {
     public sealed partial class ParamPanel : UserControl
     {
+        private List<Parameter> parameterList;
+
         public ParamPanel()
         {
             this.InitializeComponent();
+            this.parameterList = new List<Parameter>();
             this.AddItem(0);
         }
+
 
         public List<Parameter> Value
         {
@@ -35,7 +37,13 @@ namespace Postman
                 for (int i = 0; i < children.Count; i++)
                 {
                     var item = (ParamItem)children[i];
-                    result.Add(item.Value);
+                    var param = item.Value;
+                    if (param == null || param.Name.Trim() == "")
+                    {
+                        continue;
+                    }
+
+                    result.Add(param);
                 }
 
                 return result;
@@ -43,8 +51,12 @@ namespace Postman
 
             set
             {
+                this.parameterList.Clear();
+                this.parameterList = value;
+
                 var children = this.panel.Children;
                 children.Clear();
+
                 if (value.Count == 0)
                 {
                     this.AddItem(0);
@@ -53,7 +65,7 @@ namespace Postman
 
                 foreach(var param in value)
                 {
-                    ParamItem item = new ParamItem();
+                    ParamItem item = new ParamItem(param);
                     item.Value = param;
                     children.Add(item);
                 }
@@ -64,14 +76,21 @@ namespace Postman
 
         public void AddItem(uint index)
         {
+            var param = new Parameter();
+            this.parameterList.Add(param);
+
             var children = this.panel.Children;
-            ParamItem item = new ParamItem();
-            children.Add(item);
+            ParamItem item = new ParamItem(param);
 
             uint count = Convert.ToUInt32(children.Count);
-            if (index != count - 1)
+            if (index == count)
             {
-                children.Move(count - 1, index);
+                children.Add(item);
+                this.parameterList.Add(param);
+
+            } else {
+                children.Insert(Convert.ToInt32(index), item);
+                this.parameterList.Insert(Convert.ToInt32(index), param);
             }
 
             this.indexItem();
@@ -79,8 +98,9 @@ namespace Postman
 
         public void DeleteItem(uint index)
         {
-            var item = (ParamItem)this.panel.Children[Convert.ToInt32(index)];
+            this.parameterList.RemoveAt(Convert.ToInt32(index));
             this.panel.Children.RemoveAt(Convert.ToInt32(index));
+
             this.indexItem();
         }
 

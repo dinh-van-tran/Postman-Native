@@ -49,6 +49,11 @@ namespace DataAccessLibrary
         public Request()
         {
             this.id = -1;
+            this.name = "";
+            this.method = "GET";
+            this.url = "";
+            this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
         }
 
         public Request(string name, string method, string url)
@@ -57,6 +62,8 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
+            this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
         }
 
         public Request(int id, string name, string method, string url)
@@ -65,6 +72,8 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
+            this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
         }
     }
 }

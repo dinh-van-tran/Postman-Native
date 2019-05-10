@@ -53,13 +53,14 @@ namespace Postman
             get { return request; }
             set {
                 request = value;
-                this.DataContext = request;
+                this.DataContext = value;
             }
         }
 
         public RequestItem()
         {
             this.InitializeComponent();
+            this.request = new Request();
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)

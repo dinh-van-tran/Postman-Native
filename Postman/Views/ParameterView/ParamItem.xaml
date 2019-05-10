@@ -16,8 +16,8 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         
-        <TextBox Grid.Column="0" x:Name="paramName" HorizontalAlignment="Stretch" Height="33" Margin="5,5,5,5" Text="" VerticalAlignment="Center"  PlaceholderText="Name" Width="Auto" BorderThickness="0"/>
-        <TextBox Grid.Column="1" x:Name="paramValue" HorizontalAlignment="Stretch" Height="33" Margin="5,5,5,5" Text="" VerticalAlignment="Center"  PlaceholderText="Value" Width="Auto" BorderThickness="0"/>
+        <TextBox Grid.Column="0" x:Name="paramName" HorizontalAlignment="Stretch" Height="33" Margin="5,5,5,5" Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Center"  PlaceholderText="Name" Width="Auto" BorderThickness="0"/>
+        <TextBox Grid.Column="1" x:Name="paramValue" HorizontalAlignment="Stretch" Height="33" Margin="5,5,5,5" Text="{Binding Value, Mode=TwoWay}" VerticalAlignment="Center"  PlaceholderText="Value" Width="Auto" BorderThickness="0"/>
         <Button Grid.Column="2" x:Name="addButton" Height="33" Width="33" Margin="5,5,5,5" Content="+" HorizontalAlignment="Center" Click="AddButton_Click"/>
         <Button Grid.Column="3" x:Name="deleteButton" Height="33" Width="33" Margin="5,5,5,5" Content="-" HorizontalAlignment="Center" Click="DeleteButton_Click"/>
     </Grid>

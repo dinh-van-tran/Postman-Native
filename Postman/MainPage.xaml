@@ -21,13 +21,9 @@
                 </ScrollViewer>
             </SplitView.Pane>
             <Grid>
-                <FlyoutBase.AttachedFlyout>
-                    <Flyout>
-                        <Grid/>
-                    </Flyout>
-                </FlyoutBase.AttachedFlyout>
                 <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="851,47,0,0" RenderTransformOrigin="0.579,1.865" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
-                <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="180,47,0,0" Height="32" Width="652"/>
+                <Custom:MethodView x:Name="methodControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,45,0,0" RenderTransformOrigin="0.539,2.25"/>
+                <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay}" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="180,47,0,0" Height="32" Width="652"/>
                 <TextBox x:Name="responseBodyTextBox" HorizontalAlignment="Left" Height="196" Margin="180,417,0,0" Text="" VerticalAlignment="Top" Width="652" IsReadOnly="True"/>
 
                 <Pivot HorizontalAlignment="Left" Width="652" Height="300" Margin="180,103,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
@@ -40,8 +36,7 @@
                 </Pivot>
                 <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="853,107,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
                 <Button x:Name="newRequestButton"  Content="New" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,10,0,0" Click="NewRequestButton_Click"/>
-                <Custom:MethodView x:Name="methodControl" HorizontalAlignment="Left" Height="46" Margin="62,40,0,0" VerticalAlignment="Top" Width="101"/>
-                
+
             </Grid>
         </SplitView>
     </Grid>

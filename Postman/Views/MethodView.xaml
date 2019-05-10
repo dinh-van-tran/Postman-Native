@@ -10,7 +10,7 @@
     d:DesignWidth="100">
 
     <Grid>
-        <ComboBox x:Name="comboBox" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedIndex="0" Width="89">
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedIndex="0" Width="89" SelectionChanged="ComboBox_SelectionChanged">
             <ComboBoxItem Content="GET"/>
             <ComboBoxItem Content="POST"/>
             <ComboBoxItem Content="PUT"/>
