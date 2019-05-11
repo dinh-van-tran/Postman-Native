@@ -9,34 +9,41 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
     <Grid>
-        <SplitView 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch"
+        <Button x:Name="newRequestButton"  Content="New" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" Click="NewRequestButton_Click" RenderTransformOrigin="4.854,3.703"/>
+
+        <SplitView
             IsPaneOpen="True"
             DisplayMode="Inline"
-            OpenPaneLength="296">
+            OpenPaneLength="296" Margin="0,96,0,0">
             <SplitView.Pane>
                 <ScrollViewer>
                     <StackPanel x:Name="requestPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </ScrollViewer>
             </SplitView.Pane>
             <Grid>
-                <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="851,47,0,0" RenderTransformOrigin="0.579,1.865" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
-                <Custom:MethodView x:Name="methodControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,45,0,0" RenderTransformOrigin="0.539,2.25"/>
-                <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay}" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="180,47,0,0" Height="32" Width="652"/>
-                <TextBox x:Name="responseBodyTextBox" HorizontalAlignment="Left" Height="196" Margin="180,417,0,0" Text="" VerticalAlignment="Top" Width="652" IsReadOnly="True"/>
+                <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="804,10,0,0" RenderTransformOrigin="0.579,1.865" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
+                <Custom:MethodView x:Name="methodControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="0.539,2.25"/>
+                <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay}" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="124,10,0,0" Height="32" Width="652"/>
+                <ScrollViewer HorizontalAlignment="Left" Height="196" Margin="124,400,0,0" VerticalAlignment="Top" Width="669" BorderBrush="Black" BorderThickness="2,2,2,2">
+                    <TextBox x:Name="responseBodyTextBox" Height="Auto" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" HorizontalAlignment="Stretch"/>
+                </ScrollViewer>
 
-                <Pivot HorizontalAlignment="Left" Width="652" Height="300" Margin="180,103,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
-                    <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Pivot HorizontalAlignment="Left" Width="669" Height="300" Margin="124,63,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
+                    <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="queryParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
-                    <PivotItem Header="Headers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <PivotItem Header="Body" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
+                        <local:ParamPanel x:Name="bodyParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
+                    </PivotItem>
+                    <PivotItem Header="Headers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="headerParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
                 </Pivot>
-                <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="853,107,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
-                <Button x:Name="newRequestButton"  Content="New" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,10,0,0" Click="NewRequestButton_Click"/>
-
+                <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="874,10,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
+                <TextBlock HorizontalAlignment="Left" Text="Status:" TextWrapping="Wrap" Margin="530,370,0,0" VerticalAlignment="Top"/>
+                <TextBlock x:Name="statusText" HorizontalAlignment="Left" Height="22" Margin="589,370,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
+                <TextBlock HorizontalAlignment="Left" Text="Time:" TextWrapping="Wrap" Margin="663,370,0,0" VerticalAlignment="Top"/>
+                <TextBlock x:Name="elapsedTimeText" HorizontalAlignment="Left" Margin="737,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
             </Grid>
         </SplitView>
     </Grid>

@@ -66,7 +66,6 @@ namespace Postman
                 foreach(var param in value)
                 {
                     ParamItem item = new ParamItem(param);
-                    item.Value = param;
                     children.Add(item);
                 }
 

@@ -36,6 +36,16 @@ namespace DataAccessLibrary
                 createTable = new SqliteCommand(addRequestQueryTable, db);
                 createTable.ExecuteReader();
 
+                String addRequestFormTable = "CREATE TABLE IF NOT EXISTS FORM_PARAMETER(" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "request_id INTEGER NOT NULL, " +
+                    "name TEXT NOT NULL, " +
+                    "value TEXT, " +
+                    "FOREIGN KEY(request_id) REFERENCES REQUEST(id)" +
+                    ");";
+                createTable = new SqliteCommand(addRequestFormTable, db);
+                createTable.ExecuteReader();
+
                 String addRequestHeaderTable = "CREATE TABLE IF NOT EXISTS HEADER(" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "request_id INTEGER NOT NULL, " +
@@ -52,7 +62,7 @@ namespace DataAccessLibrary
 
         public static List<Request> getAllRequest()
         {
-            List<Request> requests = new List<Request>();
+             List<Request> requests = new List<Request>();
 
             using (SqliteConnection db =
                 new SqliteConnection("Filename=postman.db"))
@@ -72,6 +82,7 @@ namespace DataAccessLibrary
 
                     var request = new Request(id, name, method, url);
                     request.QueryParameters = getQueryParameters(id, db);
+                    request.FormParameters = getFormParameters(id, db);
                     request.Headers = getHeaders(id, db);
 
                     requests.Add(request);
@@ -102,6 +113,7 @@ namespace DataAccessLibrary
                     string method = query.GetString(1);
                     string url = query.GetString(2);
                     request.QueryParameters = getQueryParameters(id, db);
+                    request.FormParameters = getFormParameters(id, db);
                     request.Headers = getHeaders(id, db);
 
                     request = new Request(id, name, method, url);
@@ -148,7 +160,8 @@ namespace DataAccessLibrary
                 newId = getLastRowId(db);
 
                 insertHeaders(request, db);
-                insertQueryParametes(request, db);
+                insertQueryParameters(request, db);
+                insertFormParameters(request, db);
 
                 db.Close();
             }
@@ -178,7 +191,10 @@ namespace DataAccessLibrary
                 insertHeaders(request, db);
 
                 deleteQueryParameters(request.Id, db);
-                insertQueryParametes(request, db);
+                insertQueryParameters(request, db);
+
+                deleteFormParameters(request.Id, db);
+                insertFormParameters(request, db);
 
                 db.Close();
             }
@@ -186,24 +202,75 @@ namespace DataAccessLibrary
             return request.Id;
         }
 
-        private static void deleteQueryParameters(int requestId, SqliteConnection db)
+
+        private static void insertQueryParameters(Request request, SqliteConnection db)
         {
-            SqliteCommand deleteCommand = new SqliteCommand("DELETE FROM QUERY_PARAMETER WHERE request_id = " + requestId + ";", db);
-            deleteCommand.ExecuteScalar();
+            insertParameters("QUERY_PARAMETER", request.Id, request.QueryParameters, db);
         }
 
-        private static void insertQueryParametes(Request request, SqliteConnection db)
+        private static void insertFormParameters(Request request, SqliteConnection db)
         {
-            if (request.QueryParameters == null || request.QueryParameters.Count == 0)
+            insertParameters("FORM_PARAMETER", request.Id, request.FormParameters, db);
+        }
+
+        private static void insertHeaders(Request request, SqliteConnection db)
+        {
+
+            insertParameters("HEADER", request.Id, request.Headers, db);
+        }
+
+        private static List<Parameter> getQueryParameters(int requestId, SqliteConnection db)
+        {
+            return getParameters("QUERY_PARAMETER", requestId, db);
+        }
+
+        private static List<Parameter> getFormParameters(int requestId, SqliteConnection db)
+        {
+            return getParameters("FORM_PARAMETER", requestId, db);
+        }
+
+        private static List<Parameter> getHeaders(int requestId, SqliteConnection db)
+        {
+            return getParameters("HEADER", requestId, db);
+        }
+
+        private static List<Parameter> getParameters(string tableName, int requestId, SqliteConnection db)
+        {
+            string queryString = string.Format("SELECT id, name, value FROM {0} WHERE request_id = {1};", tableName, requestId);
+            SqliteCommand selectRequestCommand = new SqliteCommand(queryString, db);
+            List<Parameter> parameterList = new List<Parameter>();
+
+            SqliteDataReader query = selectRequestCommand.ExecuteReader();
+
+            while (query.Read())
+            {
+                int id = query.GetInt32(0);
+                string name = query.GetString(1);
+                string value = query.GetString(2);
+                parameterList.Add(new Parameter(id, name, value));
+            }
+
+            return parameterList;
+        }
+
+        private static void insertParameters(string tableName, int requestId, List<Parameter> parameterList, SqliteConnection db)
+        {
+            if (parameterList == null || parameterList.Count == 0)
             {
                 return;
             }
 
-            foreach (var parameter in request.QueryParameters)
+            string queryString = string.Format("INSERT INTO {0}(request_id, name, value) VALUES (@requestId, @name, @value)", tableName);
+            foreach (var parameter in parameterList)
             {
-                SqliteCommand addCommand = new SqliteCommand("INSERT INTO QUERY_PARAMETER(request_id, name, value) VALUES (@requestId, @name, @value)", db);
+                if (parameter.Name == null || parameter.Name.Trim().Length == 0)
+                {
+                    continue;
+                }
 
-                addCommand.Parameters.AddWithValue("@requestId", request.Id);
+                SqliteCommand addCommand = new SqliteCommand(queryString, db);
+
+                addCommand.Parameters.AddWithValue("@requestId", requestId);
                 addCommand.Parameters.AddWithValue("@name", parameter.Name);
                 addCommand.Parameters.AddWithValue("@value", parameter.Value);
 
@@ -213,61 +280,24 @@ namespace DataAccessLibrary
 
         private static void deleteHeaders(int requestId, SqliteConnection db)
         {
-            SqliteCommand deleteCommand = new SqliteCommand("DELETE FROM HEADER WHERE request_id = " + requestId + ";", db);
+            deleteParameters("HEADER", requestId, db);
+        }
+
+        private static void deleteQueryParameters(int requestId, SqliteConnection db)
+        {
+            deleteParameters("QUERY_PARAMETER", requestId, db);
+        }
+
+        private static void deleteFormParameters(int requestId, SqliteConnection db)
+        {
+            deleteParameters("FORM_PARAMETER", requestId, db);
+        }
+
+        private static void deleteParameters(string tableName, int requestId, SqliteConnection db)
+        {
+            string queryString = string.Format("DELETE FROM {0} WHERE request_id = {1}", tableName, requestId);
+            SqliteCommand deleteCommand = new SqliteCommand(queryString, db);
             deleteCommand.ExecuteScalar();
-        }
-
-        private static void insertHeaders(Request request, SqliteConnection db)
-        {
-            if (request.Headers == null || request.Headers.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var header in request.Headers)
-            {
-                SqliteCommand addCommand = new SqliteCommand("INSERT INTO HEADER(request_id, name, value) VALUES (@requestId, @name, @value)", db);
-
-                addCommand.Parameters.AddWithValue("@requestId", request.Id);
-                addCommand.Parameters.AddWithValue("@name", header.Name);
-                addCommand.Parameters.AddWithValue("@value", header.Value);
-
-                addCommand.ExecuteScalar();
-            }
-        }
-
-        private static List<Parameter> getQueryParameters(int requestId, SqliteConnection db)
-        {
-            List<Parameter> parameters = new List<Parameter>();
-            SqliteCommand selectRequestCommand = new SqliteCommand ("SELECT id, name, value FROM QUERY_PARAMETER WHERE request_id = " + requestId + ";", db);
-            SqliteDataReader query = selectRequestCommand.ExecuteReader();
-
-            while (query.Read())
-            {
-                int id = query.GetInt32(0);
-                string name = query.GetString(1);
-                string value = query.GetString(2);
-                parameters.Add(new Parameter(id, name, value));
-            }
-
-            return parameters;
-        }
-
-        private static List<Parameter> getHeaders(int requestId, SqliteConnection db)
-        {
-            List<Parameter> headers = new List<Parameter>();
-            SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, name, value FROM HEADER WHERE request_id = " + requestId + ";", db);
-            SqliteDataReader query = selectRequestCommand.ExecuteReader();
-
-            while (query.Read())
-            {
-                int id = query.GetInt32(0);
-                string name = query.GetString(1);
-                string value = query.GetString(2);
-                headers.Add(new Parameter(id, name, value));
-            }
-
-            return headers;
         }
 
         public static int getLastRowId(SqliteConnection db)

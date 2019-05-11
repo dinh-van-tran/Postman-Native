@@ -5,6 +5,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using DataAccessLibrary;
 using Postman.Views.RequestView;
+using Postman.Services;
 
 namespace Postman
 {
@@ -24,6 +25,7 @@ namespace Postman
             List<Request> requests = DataAccess.getAllRequest();
             if (requests.Count == 0)
             {
+                this.newRequest();
                 return;
             }
 
@@ -44,21 +46,17 @@ namespace Postman
             this.DataContext = request;
 
             this.methodControl.Value = request;
-            this.queryParamPanel.Value = request.QueryParameters;
             this.headerParamPanel.Value = request.Headers;
+            this.queryParamPanel.Value = request.QueryParameters;
+            this.bodyParamPanel.Value = request.FormParameters;
         }
 
-        private void sendButtonClick(object sender, RoutedEventArgs e)
+        private async void sendButtonClick(object sender, RoutedEventArgs e)
         {
-            List<Parameter> queryParam = this.queryParamPanel.Value;
-            StringBuilder sb = new StringBuilder();
-            sb.Append("?");
-            foreach(var param in queryParam)
-            {
-                sb.Append(param.Name).Append("=").Append(param.Value).Append("&");
-            }
-
-            this.responseBodyTextBox.Text = sb.ToString();
+            Response response = await RestClient.SendRequestAsync(this.currentRequest);
+            this.statusText.Text = Convert.ToString(response.StatusCode);
+            this.responseBodyTextBox.Text = response.Content;
+            this.elapsedTimeText.Text = Convert.ToString(response.ElapsedTime) + "ms";
         }
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -74,7 +72,6 @@ namespace Postman
 
                 this.currentRequest.Name = saveDialog.Text.Trim();
             }
-
 
             this.SaveRequest();
         }
@@ -99,6 +96,11 @@ namespace Postman
         }
 
         private void NewRequestButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.newRequest();
+        }
+
+        private void newRequest()
         {
             this.currentRequest = new Request();
             this.DataContext = this.currentRequest;

@@ -9,7 +9,7 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <ScrollViewer>
+    <ScrollViewer BorderBrush="Black" BorderThickness="2,2,2,2">
         <StackPanel x:Name="panel"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
  
         </StackPanel>

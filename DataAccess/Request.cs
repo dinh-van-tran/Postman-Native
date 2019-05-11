@@ -46,6 +46,13 @@ namespace DataAccessLibrary
             set { queryParameters = value; }
         }
 
+        private List<Parameter> formParameters;
+        public List<Parameter> FormParameters
+        {
+            get { return formParameters; }
+            set { formParameters = value; }
+        }
+
         public Request()
         {
             this.id = -1;
@@ -54,6 +61,7 @@ namespace DataAccessLibrary
             this.url = "";
             this.queryParameters = new List<Parameter>();
             this.headers = new List<Parameter>();
+            this.formParameters = new List<Parameter>();
         }
 
         public Request(string name, string method, string url)
@@ -62,8 +70,9 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.queryParameters = new List<Parameter>();
             this.headers = new List<Parameter>();
+            this.queryParameters = new List<Parameter>();
+            this.formParameters = new List<Parameter>();
         }
 
         public Request(int id, string name, string method, string url)
@@ -72,8 +81,9 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.queryParameters = new List<Parameter>();
             this.headers = new List<Parameter>();
+            this.queryParameters = new List<Parameter>();
+            this.formParameters = new List<Parameter>();
         }
     }
 }
