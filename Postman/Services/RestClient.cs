@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,12 +27,19 @@ namespace Postman.Services
 
             //    if (response.Content.Headers.ContentType.MediaType == "text/html")
             //    {
-            result.Content = await response.Content.ReadAsStringAsync();
+            //result.Content = await response.Content.ReadAsStringAsync();
             //    } else {
             //        result.Content = await response.Content.ReadAsStringAsync();
             //    }
 
             //}
+
+            result.Content = await response.Content.ReadAsStringAsync();
+            if (response.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                dynamic parsedJson = JsonConvert.DeserializeObject(result.Content);
+                result.Content = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+            }
 
             stopWatch.Stop();
             result.ElapsedTime = stopWatch.ElapsedMilliseconds;

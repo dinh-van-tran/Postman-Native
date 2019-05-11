@@ -17,18 +17,16 @@
             OpenPaneLength="296" Margin="0,96,0,0">
             <SplitView.Pane>
                 <ScrollViewer>
-                    <StackPanel x:Name="requestPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <StackPanel x:Name="requestPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,5,0,0"/>
                 </ScrollViewer>
             </SplitView.Pane>
-            <Grid>
-                <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="804,10,0,0" RenderTransformOrigin="0.579,1.865" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
+            <RelativePanel>
                 <Custom:MethodView x:Name="methodControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="0.539,2.25"/>
-                <TextBox x:Name="urlTextbox" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay}" VerticalAlignment="Top" RenderTransformOrigin="5.303,5.329" Margin="124,10,0,0" Height="32" Width="652"/>
-                <ScrollViewer HorizontalAlignment="Left" Height="196" Margin="124,400,0,0" VerticalAlignment="Top" Width="669" BorderBrush="Black" BorderThickness="2,2,2,2">
-                    <TextBox x:Name="responseBodyTextBox" Height="Auto" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" HorizontalAlignment="Stretch"/>
-                </ScrollViewer>
+                <TextBox x:Name="urlTextbox" RelativePanel.RightOf="methodControl" RelativePanel.AlignVerticalCenterWith="methodControl" Text="{Binding Url, Mode=TwoWay}"  Margin="10,10,0,0" Height="32" Width="700"/>
+                <Button x:Name="sendButton" RelativePanel.RightOf="urlTextbox" RelativePanel.AlignVerticalCenterWith="methodControl" Content="Send"  Margin="10,10,0,0" Click="sendButtonClick" Background="{ThemeResource TextBoxButtonPointerOverBackgroundThemeBrush}"/>
+                <Button x:Name="saveButton" Content="Save" RelativePanel.RightOf="sendButton" RelativePanel.AlignBottomWith="sendButton" VerticalAlignment="Top" Click="SaveButton_Click" Margin="10,0,0,0"/>
 
-                <Pivot HorizontalAlignment="Left" Width="669" Height="300" Margin="124,63,0,0" Title="" VerticalAlignment="Top"  BorderThickness="2,2,2,2" BorderBrush="Black">
+                <Pivot x:Name="pivot" RelativePanel.Below="urlTextbox" RelativePanel.AlignLeftWith="urlTextbox" RelativePanel.AlignRightWith="urlTextbox" Height="300" Margin="0,0,0,0" Title="" BorderThickness="2,2,2,2" BorderBrush="Black">
                     <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="queryParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
@@ -39,12 +37,17 @@
                         <local:ParamPanel x:Name="headerParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
                 </Pivot>
-                <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="874,10,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
-                <TextBlock HorizontalAlignment="Left" Text="Status:" TextWrapping="Wrap" Margin="530,370,0,0" VerticalAlignment="Top"/>
-                <TextBlock x:Name="statusText" HorizontalAlignment="Left" Height="22" Margin="589,370,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
-                <TextBlock HorizontalAlignment="Left" Text="Time:" TextWrapping="Wrap" Margin="663,370,0,0" VerticalAlignment="Top"/>
-                <TextBlock x:Name="elapsedTimeText" HorizontalAlignment="Left" Margin="737,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
-            </Grid>
+
+                <TextBlock RelativePanel.LeftOf="statusText" RelativePanel.AlignBottomWith="elapsedTimeText" Text="Status:" TextWrapping="Wrap" Margin="0,0,0,0" />
+                <TextBlock RelativePanel.LeftOf="elapsedTimeLabel" RelativePanel.AlignBottomWith="elapsedTimeText" x:Name="statusText" Margin="0,0,10,0"  TextWrapping="Wrap"  Width="25" TextAlignment="Right"/>
+
+                <TextBlock x:Name="elapsedTimeLabel" RelativePanel.LeftOf="elapsedTimeText" RelativePanel.AlignBottomWith="elapsedTimeText" Text="Time:" TextWrapping="Wrap" Margin="0,0,0,0" VerticalAlignment="Top" FontFamily="Segoe UI"/>
+                <TextBlock x:Name="elapsedTimeText" RelativePanel.Below="pivot" RelativePanel.AlignRightWith="pivot" Margin="0,20,0,0" TextWrapping="Wrap" Width="50" Height="20" TextAlignment="Right"/>
+
+                <ScrollViewer x:Name="responseBodyScrollViewer" RelativePanel.Below="pivot" RelativePanel.AlignLeftWith="methodControl" RelativePanel.AlignRightWith="sendButton" RelativePanel.AlignBottomWithPanel="True" Margin="10,50,0,14" BorderBrush="Black" BorderThickness="2,2,2,2">
+                    <TextBox x:Name="responseBodyTextBox" Height="Auto" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" HorizontalAlignment="Stretch"/>
+                </ScrollViewer>
+            </RelativePanel>
         </SplitView>
     </Grid>
 </Page>
