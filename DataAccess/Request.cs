@@ -46,11 +46,25 @@ namespace DataAccessLibrary
             set { queryParameters = value; }
         }
 
+        private string bodyParameterType;
+        public string BodyParameterType
+        {
+            get { return bodyParameterType; }
+            set { bodyParameterType = value; }
+        }
+
         private List<Parameter> formParameters;
         public List<Parameter> FormParameters
         {
             get { return formParameters; }
             set { formParameters = value; }
+        }
+
+        private string textParameter;
+        public string TextParameter
+        {
+            get { return textParameter; }
+            set { textParameter = value; }
         }
 
         public Request()
@@ -61,6 +75,8 @@ namespace DataAccessLibrary
             this.url = "";
             this.queryParameters = new List<Parameter>();
             this.headers = new List<Parameter>();
+            this.bodyParameterType = "TEXT";
+            this.textParameter = "";
             this.formParameters = new List<Parameter>();
         }
 
@@ -70,8 +86,10 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.headers = new List<Parameter>();
             this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
+            this.bodyParameterType = "TEXT";
+            this.textParameter = "";
             this.formParameters = new List<Parameter>();
         }
 
@@ -81,8 +99,23 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.headers = new List<Parameter>();
             this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
+            this.bodyParameterType = "TEXT";
+            this.textParameter = "";
+            this.formParameters = new List<Parameter>();
+        }
+
+        public Request(int id, string name, string method, string url, string bodyParameterType, string textParameter)
+        {
+            this.id = id;
+            this.name = name;
+            this.method = method;
+            this.url = url;
+            this.queryParameters = new List<Parameter>();
+            this.headers = new List<Parameter>();
+            this.bodyParameterType = bodyParameterType;
+            this.textParameter = textParameter;
             this.formParameters = new List<Parameter>();
         }
     }

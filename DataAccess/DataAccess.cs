@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 
 namespace DataAccessLibrary
@@ -20,7 +17,9 @@ namespace DataAccessLibrary
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT NOT NULL, " +
                     "method VARCHAR(10) NOT NULL, " +
-                    "url TEXT NOT NULL" +
+                    "url TEXT NOT NULL, " +
+                    "body_parameter_type VARCHAR(10) NOT NULL DEFAULT 'TEXT', " +
+                    "text_parameter TEXT NOT NULL DEFAULT '' " +
                     ");";
 
                 SqliteCommand createTable = new SqliteCommand(addRequestTable, db);
@@ -69,7 +68,7 @@ namespace DataAccessLibrary
             {
                 db.Open();
 
-                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, name, method, url FROM REQUEST;", db);
+                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, name, method, url, body_parameter_type, text_parameter FROM REQUEST;", db);
 
                 SqliteDataReader query = selectRequestCommand.ExecuteReader();
 
@@ -79,8 +78,10 @@ namespace DataAccessLibrary
                     string name = query.GetString(1);
                     string method = query.GetString(2);
                     string url = query.GetString(3);
+                    string bodyParameterType = query.GetString(4);
+                    string textParameter = query.GetString(5);
 
-                    var request = new Request(id, name, method, url);
+                    var request = new Request(id, name, method, url, bodyParameterType, textParameter);
                     request.QueryParameters = getQueryParameters(id, db);
                     request.FormParameters = getFormParameters(id, db);
                     request.Headers = getHeaders(id, db);
@@ -103,7 +104,7 @@ namespace DataAccessLibrary
             {
                 db.Open();
 
-                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT name, method, url FROM REQUEST WHERE id = " + id + ";", db);
+                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT name, method, url, body_parameter_type, text_parameter FROM REQUEST WHERE id = " + id + ";", db);
 
                 SqliteDataReader query = selectRequestCommand.ExecuteReader();
 
@@ -112,6 +113,9 @@ namespace DataAccessLibrary
                     string name = query.GetString(0);
                     string method = query.GetString(1);
                     string url = query.GetString(2);
+                    string bodyParameterType = query.GetString(3);
+                    string textParameter = query.GetString(4);
+
                     request.QueryParameters = getQueryParameters(id, db);
                     request.FormParameters = getFormParameters(id, db);
                     request.Headers = getHeaders(id, db);
@@ -150,18 +154,20 @@ namespace DataAccessLibrary
 
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = db;
-                command.CommandText = "INSERT INTO REQUEST(name, method, url) VALUES(@name, @method, @url);";
+                command.CommandText = "INSERT INTO REQUEST(name, method, url, body_parameter_type, text_parameter) VALUES(@name, @method, @url, @bodyParameter, @textParameter);";
 
                 command.Parameters.AddWithValue("@name", request.Name);
                 command.Parameters.AddWithValue("@method", request.Method);
                 command.Parameters.AddWithValue("@url", request.Url);
+                command.Parameters.AddWithValue("@bodyParameter", request.BodyParameterType);
+                command.Parameters.AddWithValue("@textParameter", request.TextParameter);
 
                 command.ExecuteReader();
                 newId = getLastRowId(db);
 
-                insertHeaders(request, db);
-                insertQueryParameters(request, db);
-                insertFormParameters(request, db);
+                insertHeaders(request, newId, db);
+                insertQueryParameters(request, newId, db);
+                insertFormParameters(request, newId, db);
 
                 db.Close();
             }
@@ -178,23 +184,25 @@ namespace DataAccessLibrary
 
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = db;
-                command.CommandText = "UPDATE REQUEST SET method = @method, url = @url where id = @id;";
+                command.CommandText = "UPDATE REQUEST SET method = @method, url = @url, body_parameter_type = @bodyParameter, text_parameter = @textParameter WHERE id = @id;";
 
                 command.Parameters.AddWithValue("@id", request.Id);
                 command.Parameters.AddWithValue("@name", request.Name);
                 command.Parameters.AddWithValue("@method", request.Method);
                 command.Parameters.AddWithValue("@url", request.Url);
+                command.Parameters.AddWithValue("@bodyParameter", request.BodyParameterType);
+                command.Parameters.AddWithValue("@textParameter", request.TextParameter);
 
                 command.ExecuteReader();
 
                 deleteHeaders(request.Id, db);
-                insertHeaders(request, db);
+                insertHeaders(request, request.Id, db);
 
                 deleteQueryParameters(request.Id, db);
-                insertQueryParameters(request, db);
+                insertQueryParameters(request, request.Id, db);
 
                 deleteFormParameters(request.Id, db);
-                insertFormParameters(request, db);
+                insertFormParameters(request, request.Id, db);
 
                 db.Close();
             }
@@ -203,20 +211,20 @@ namespace DataAccessLibrary
         }
 
 
-        private static void insertQueryParameters(Request request, SqliteConnection db)
+        private static void insertQueryParameters(Request request, int requestId, SqliteConnection db)
         {
-            insertParameters("QUERY_PARAMETER", request.Id, request.QueryParameters, db);
+            insertParameters("QUERY_PARAMETER", requestId, request.QueryParameters, db);
         }
 
-        private static void insertFormParameters(Request request, SqliteConnection db)
+        private static void insertFormParameters(Request request, int requestId, SqliteConnection db)
         {
-            insertParameters("FORM_PARAMETER", request.Id, request.FormParameters, db);
+            insertParameters("FORM_PARAMETER", requestId, request.FormParameters, db);
         }
 
-        private static void insertHeaders(Request request, SqliteConnection db)
+        private static void insertHeaders(Request request, int requestId, SqliteConnection db)
         {
 
-            insertParameters("HEADER", request.Id, request.Headers, db);
+            insertParameters("HEADER", requestId, request.Headers, db);
         }
 
         private static List<Parameter> getQueryParameters(int requestId, SqliteConnection db)

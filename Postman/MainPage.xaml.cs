@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using DataAccessLibrary;
@@ -8,7 +6,6 @@ using Postman.Views.RequestView;
 using Postman.Services;
 using Windows.System.Threading;
 using Windows.UI.Core;
-using System.Diagnostics;
 
 namespace Postman
 {
@@ -50,7 +47,7 @@ namespace Postman
             this.methodControl.Value = request;
             this.headerParamPanel.Value = request.Headers;
             this.queryParamPanel.Value = request.QueryParameters;
-            this.bodyParamPanel.Value = request.FormParameters;
+            this.bodyParamPanel.Value = request;
         }
 
         private void sendButtonClick(object sender, RoutedEventArgs e)

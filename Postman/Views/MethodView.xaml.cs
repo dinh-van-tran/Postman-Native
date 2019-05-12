@@ -1,7 +1,7 @@
 ﻿using DataAccessLibrary;
 using Windows.UI.Xaml.Controls;
 
-namespace Postman.Views
+namespace Postman
 {
     public sealed partial class MethodView : UserControl
     {

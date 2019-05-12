@@ -1,18 +1,8 @@
 ﻿using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace Postman
 {
@@ -75,11 +65,10 @@ namespace Postman
 
         public void AddItem(uint index)
         {
-            var param = new Parameter();
-            this.parameterList.Add(param);
-
             var children = this.panel.Children;
-            ParamItem item = new ParamItem(param);
+
+            var param = new Parameter();
+            var item = new ParamItem(param);
 
             uint count = Convert.ToUInt32(children.Count);
             if (index == count)
