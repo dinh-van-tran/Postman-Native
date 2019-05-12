@@ -6,6 +6,7 @@ using Postman.Views.RequestView;
 using Postman.Services;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace Postman
 {
@@ -144,6 +145,21 @@ namespace Postman
             }
 
             DataAccess.RemoveRequest(request);
+        }
+
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText(this.responseBodyTextBox.Text);
+            Clipboard.SetContent(dataPackage);
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.statusText.Text = "";
+            this.responseBodyTextBox.Text = "";
+            this.elapsedTimeText.Text = "";
         }
     }
 }
