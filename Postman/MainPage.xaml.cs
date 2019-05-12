@@ -6,6 +6,9 @@ using Windows.UI.Xaml.Controls;
 using DataAccessLibrary;
 using Postman.Views.RequestView;
 using Postman.Services;
+using Windows.System.Threading;
+using Windows.UI.Core;
+using System.Diagnostics;
 
 namespace Postman
 {
@@ -21,8 +24,7 @@ namespace Postman
 
         private void loadData()
         {
-            currentRequest = new Request();
-            List<Request> requests = DataAccess.getAllRequest();
+            var requests = DataAccess.getAllRequest();
             if (requests.Count == 0)
             {
                 this.newRequest();
@@ -51,9 +53,20 @@ namespace Postman
             this.bodyParamPanel.Value = request.FormParameters;
         }
 
-        private async void sendButtonClick(object sender, RoutedEventArgs e)
+        private void sendButtonClick(object sender, RoutedEventArgs e)
         {
-            Response response = await RestClient.SendRequestAsync(this.currentRequest);
+            ThreadPool.RunAsync((workItem) =>
+            {
+                Response response = RestClient.SendRequestAsync(this.currentRequest).Result;
+                Dispatcher.RunAsync(CoreDispatcherPriority.High, new DispatchedHandler(() =>
+                {
+                    sendRequestComplete(response);
+                }));
+            });
+        }
+
+        private void sendRequestComplete(Response response)
+        {
             this.statusText.Text = Convert.ToString(response.StatusCode);
             this.responseBodyTextBox.Text = response.Content;
             this.elapsedTimeText.Text = Convert.ToString(response.ElapsedTime) + "ms";

@@ -30,8 +30,11 @@
                     <PivotItem Header="Params" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="queryParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
-                    <PivotItem Header="Body" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
+                    <PivotItem Header="Body Form" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="bodyParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
+                    </PivotItem>
+                    <PivotItem Header="Body Text" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
+                        <local:ParamPanel Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
                     </PivotItem>
                     <PivotItem Header="Headers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black">
                         <local:ParamPanel x:Name="headerParamPanel" Height="200" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" BorderThickness="2,2,2,2" BorderBrush="Black"/>
