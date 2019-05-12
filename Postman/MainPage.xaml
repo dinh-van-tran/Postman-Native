@@ -36,7 +36,7 @@
                 <Button x:Name="copyButton" Content="Copy" RelativePanel.AlignLeftWith="responseBodyScrollViewer" RelativePanel.Below="pivot" Height="32" Width="62" Margin="10,20,10,0" Click="CopyButton_Click"/>
                 <Button x:Name="clearButton" Content="Clear" RelativePanel.RightOf="copyButton" RelativePanel.AlignBottomWith="copyButton" Height="32" Width="62" Click="ClearButton_Click"/>
                 <ScrollViewer x:Name="responseBodyScrollViewer" RelativePanel.Below="pivot" RelativePanel.AlignLeftWith="methodControl" RelativePanel.AlignRightWith="sendButton" RelativePanel.AlignBottomWithPanel="True" Margin="10,60,0,6" BorderBrush="Black" BorderThickness="2,2,2,2">
-                    <TextBlock x:Name="responseBodyTextBox" Height="Auto" TextWrapping="Wrap" HorizontalAlignment="Stretch"/>
+                    <TextBlock x:Name="responseBodyTextBox" Height="Auto" TextWrapping="Wrap" IsTextSelectionEnabled="True" HorizontalAlignment="Stretch"/>
                 </ScrollViewer>
             </RelativePanel>
         </SplitView>
