@@ -7,6 +7,7 @@ using Postman.Services;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.ApplicationModel.DataTransfer;
+using System.Threading.Tasks;
 
 namespace Postman
 {
@@ -70,19 +71,26 @@ namespace Postman
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.currentRequest.Name == "")
-            {
-                var saveDialog = new SaveRequestDialog(this);
-                var result = await saveDialog.ShowAsync();
-                if (result != ContentDialogResult.Primary)
-                {
-                    return;
-                }
+            await this.setRequestName();
+            this.SaveRequest();
+        }
 
-                this.currentRequest.Name = saveDialog.Text.Trim();
+        private async Task<int> setRequestName()
+        {
+            if (this.currentRequest.Name != "")
+            {
+                return 0;
             }
 
-            this.SaveRequest();
+            var saveDialog = new SaveRequestDialog(this);
+            var result = await saveDialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+            {
+                return 0;
+            }
+
+            this.currentRequest.Name = saveDialog.Text.Trim();
+            return 0;
         }
 
         public void SaveRequest()
@@ -118,18 +126,7 @@ namespace Postman
 
         public void DeleteRequest(Request request)
         {
-            int index = -1;
-            for (int i = 0; i < this.requestPanel.Children.Count; i++)
-            {
-                var requestItem = (RequestItem)this.requestPanel.Children[i];
-                var req = requestItem.Request;
-                if (requestItem.Request.Id == request.Id)
-                {
-                    index = i;
-                    break;
-                }
-            }
-
+            int index = getRequestIndex(request);
             if (index == -1)
             {
                 return;
@@ -158,6 +155,21 @@ namespace Postman
             this.statusText.Text = "";
             this.responseBodyTextBox.Text = "";
             this.elapsedTimeText.Text = "";
+        }
+
+        private int getRequestIndex(Request request)
+        {
+            for (int i = 0; i < this.requestPanel.Children.Count; i++)
+            {
+                var requestItem = (RequestItem)this.requestPanel.Children[i];
+                var req = requestItem.Request;
+                if (requestItem.Request.Id == request.Id)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     }
 }
