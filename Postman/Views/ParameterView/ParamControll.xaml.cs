@@ -6,11 +6,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace Postman
 {
-    public sealed partial class ParamPanel : UserControl
+    public sealed partial class ParamControl : UserControl
     {
         private List<Parameter> parameterList;
 
-        public ParamPanel()
+        public ParamControl()
         {
             this.InitializeComponent();
             this.parameterList = new List<Parameter>();

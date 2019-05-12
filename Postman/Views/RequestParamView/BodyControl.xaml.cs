@@ -4,7 +4,7 @@ using DataAccessLibrary;
 
 namespace Postman
 {
-    public sealed partial class BodyPanel : UserControl
+    public sealed partial class BodyControl : UserControl
     {
         private Request request;
         public Request Value
@@ -28,7 +28,7 @@ namespace Postman
             }
         }
 
-        public BodyPanel()
+        public BodyControl()
         {
             this.InitializeComponent();
             this.request = new Request();

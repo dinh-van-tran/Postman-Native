@@ -46,9 +46,7 @@ namespace Postman
             this.DataContext = request;
 
             this.methodControl.Value = request;
-            this.headerParamPanel.Value = request.Headers;
-            this.queryParamPanel.Value = request.QueryParameters;
-            this.bodyParamPanel.Value = request;
+            this.pivot.Request = request;
         }
 
         private void sendButtonClick(object sender, RoutedEventArgs e)

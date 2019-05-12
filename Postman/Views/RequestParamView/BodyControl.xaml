@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Custom="using:Postman"
-    x:Class="Postman.BodyPanel"
+    x:Class="Postman.BodyControl"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -12,7 +12,7 @@
     <Grid>
         <Pivot x:Name="pivot" SelectionChanged="Pivot_SelectionChanged">
             <PivotItem x:Name="bodyFormPivotItem" Header="Form">
-                <Custom:ParamPanel x:Name="bodyParamPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Custom:ParamControl x:Name="bodyParamPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </PivotItem>
             <PivotItem x:Name="bodyTextPivotItem" Header="Text">
                 <ScrollViewer>

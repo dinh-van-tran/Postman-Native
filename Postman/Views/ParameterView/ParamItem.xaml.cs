@@ -11,7 +11,7 @@ namespace Postman
     public sealed partial class ParamItem : UserControl
     {
         private uint index;
-        private WeakReference<ParamPanel> panel;
+        private WeakReference<ParamControl> panel;
 
         private Parameter parameter;
 
@@ -21,10 +21,10 @@ namespace Postman
             set { index = value; }
         }
 
-        public ParamPanel Panel
+        public ParamControl Panel
         {
             get {
-                ParamPanel result;
+                ParamControl result;
                 if (panel == null || !panel.TryGetTarget(out result))
                 {
                     return null;
@@ -39,7 +39,7 @@ namespace Postman
                 }
                 else
                 {
-                    panel = new WeakReference<ParamPanel>(value);
+                    panel = new WeakReference<ParamControl>(value);
                 }
             }
         }
