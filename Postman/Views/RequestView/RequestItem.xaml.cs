@@ -53,21 +53,6 @@ namespace Postman
             this.request = new Request();
         }
 
-        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
-        private void IdTextBox_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
-        private void NameTextBox_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
         private void setRequestValue()
         {
             if (this.Panel == null)
@@ -78,24 +63,24 @@ namespace Postman
             this.Panel.SetRequestValue(this.request);
         }
 
-        private void IdTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
-        private void NameTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
-        private void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            this.setRequestValue();
-        }
-
         private void NameTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             this.setRequestValue();
+        }
+
+        private void NameTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != Windows.System.VirtualKey.Delete)
+            {
+                return;
+            }
+
+            if (this.Panel == null)
+            {
+                return;
+            }
+
+            this.Panel.DeleteRequest(this.request);
         }
     }
 }

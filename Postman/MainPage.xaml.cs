@@ -116,5 +116,34 @@ namespace Postman
             this.DataContext = this.currentRequest;
             this.SetRequestValue(this.currentRequest);
         }
+
+        public void DeleteRequest(Request request)
+        {
+            int index = -1;
+            for (int i = 0; i < this.requestPanel.Children.Count; i++)
+            {
+                var requestItem = (RequestItem)this.requestPanel.Children[i];
+                var req = requestItem.Request;
+                if (requestItem.Request.Id == request.Id)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index == -1)
+            {
+                return;
+            }
+
+            this.requestPanel.Children.RemoveAt(index);
+
+            if (this.currentRequest.Id == request.Id)
+            {
+                this.newRequest();
+            }
+
+            DataAccess.RemoveRequest(request);
+        }
     }
 }

@@ -210,6 +210,29 @@ namespace DataAccessLibrary
             return request.Id;
         }
 
+        public static void RemoveRequest(Request request)
+        {
+            using (SqliteConnection db =
+               new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = db;
+                command.CommandText = "DELETE FROM REQUEST WHERE id = @id;";
+
+                command.Parameters.AddWithValue("@id", request.Id);
+
+                command.ExecuteReader();
+
+                deleteHeaders(request.Id, db);
+                deleteQueryParameters(request.Id, db);
+                deleteFormParameters(request.Id, db);
+
+                db.Close();
+            }
+        }
+
 
         private static void insertQueryParameters(Request request, int requestId, SqliteConnection db)
         {

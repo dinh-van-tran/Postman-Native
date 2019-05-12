@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Postman.Services
@@ -97,6 +98,16 @@ namespace Postman.Services
 
         private static HttpContent buildContent(Request request)
         {
+            if (request.BodyParameterType == "FORM")
+            {
+                return buildFormContent(request);
+            }
+
+            return buildTextContent(request);
+        }
+
+        private static HttpContent buildFormContent(Request request)
+        {
             var keyValues = new List<KeyValuePair<string, string>>();
             foreach (var parameter in request.FormParameters)
             {
@@ -108,6 +119,11 @@ namespace Postman.Services
                 keyValues.Add(new KeyValuePair<string, string>(parameter.Name, parameter.Value));
             }
             return new FormUrlEncodedContent(keyValues);
+        }
+
+        private static HttpContent buildTextContent(Request request)
+        {
+            return new StringContent(request.TextParameter, new UTF8Encoding() , "application/json");
         }
 
         private static void setHeaders(Request request, HttpRequestHeaders requestHeaders)
