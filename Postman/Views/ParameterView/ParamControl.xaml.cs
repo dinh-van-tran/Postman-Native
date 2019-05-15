@@ -41,11 +41,11 @@ namespace Postman
 
             set
             {
-                this.parameterList.Clear();
-                this.parameterList = value;
 
                 var children = this.panel.Children;
                 children.Clear();
+
+                this.parameterList = value;
 
                 if (value.Count == 0)
                 {

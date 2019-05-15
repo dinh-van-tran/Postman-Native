@@ -16,7 +16,7 @@
             </PivotItem>
             <PivotItem x:Name="bodyTextPivotItem" Header="Text">
                 <ScrollViewer>
-                    <TextBox x:Name="bodyText" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding TextParameter, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    <TextBox x:Name="bodyText" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanged="BodyText_TextChanged" />
                 </ScrollViewer>
             </PivotItem>
         </Pivot>

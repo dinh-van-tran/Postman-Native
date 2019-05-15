@@ -12,7 +12,7 @@ namespace Postman
             get { return request; }
             set {
                 request = value;
-                this.DataContext = value;
+                this.bodyText.Text = value.TextParameter;
                 this.bodyParamPanel.Value = value.FormParameters;
 
                 switch (value.BodyParameterType)
@@ -24,15 +24,19 @@ namespace Postman
                         this.pivot.SelectedIndex = 0;
                         break;
                 }
-
             }
+        }
+
+        private string TextParameter
+        {
+            get { return this.request.TextParameter; }
+            set { this.request.TextParameter = value; }
         }
 
         public BodyControl()
         {
             this.InitializeComponent();
             this.request = new Request();
-            this.DataContext = this.request;
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,6 +50,11 @@ namespace Postman
                     this.request.BodyParameterType = "TEXT";
                     break;
             }
+        }
+
+        private void BodyText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.request.TextParameter = this.bodyText.Text;
         }
     }
 }

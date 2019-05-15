@@ -43,11 +43,16 @@ namespace Postman
 
         public void SetRequestValue(Request request)
         {
-            this.currentRequest = request;
-            this.DataContext = request;
+            if (request != null && this.currentRequest != null && request.Id == this.currentRequest.Id)
+            {
+                return;
+            }
 
             this.methodControl.Value = request;
             this.pivot.Request = request;
+
+            this.DataContext = request;
+            this.currentRequest = request;
         }
 
         private void sendButtonClick(object sender, RoutedEventArgs e)
