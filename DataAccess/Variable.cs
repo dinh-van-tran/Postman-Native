@@ -1,11 +1,12 @@
 ﻿namespace DataAccessLibrary
 {
-    public class Parameter
+    public class Variable
     {
-        private readonly int id;
+        private int id;
         public int Id
         {
             get { return id; }
+            set { id = value; }
         }
 
         private string name;
@@ -22,21 +23,21 @@
             set { this.value = value; }
         }
 
-        public Parameter()
+        public Variable()
         {
             this.id = -1;
             this.name = "";
             this.value = "";
         }
 
-        public Parameter(string name, string value)
+        public Variable(string name, string value)
         {
             this.id = -1;
             this.name = name;
             this.value = value;
         }
 
-        public Parameter(int id, string name, string value)
+        public Variable(int id, string name, string value)
         {
             this.id = id;
             this.name = name;

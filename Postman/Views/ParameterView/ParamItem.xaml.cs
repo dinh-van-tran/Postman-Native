@@ -13,7 +13,7 @@ namespace Postman
         private uint index;
         private WeakReference<ParamControl> panel;
 
-        private Parameter parameter;
+        private Variable parameter;
 
         public uint Index
         {
@@ -50,7 +50,7 @@ namespace Postman
             set { this.deleteButton.Visibility = value; }
         }
 
-        public Parameter Value
+        public Variable Value
         {
             get {
                 return this.parameter;
@@ -62,7 +62,7 @@ namespace Postman
             }
         }
 
-        public ParamItem(Parameter param)
+        public ParamItem(Variable param)
         {
             this.InitializeComponent();
             this.parameter = param;

@@ -32,15 +32,15 @@ namespace DataAccessLibrary
             set { url = value; }
         }
 
-        private List<Parameter> headers;
-        public List<Parameter> Headers
+        private List<Variable> headers;
+        public List<Variable> Headers
         {
             get { return headers; }
             set { headers = value; }
         }
 
-        private List<Parameter> queryParameters;
-        public List<Parameter> QueryParameters
+        private List<Variable> queryParameters;
+        public List<Variable> QueryParameters
         {
             get { return queryParameters; }
             set { queryParameters = value; }
@@ -53,8 +53,8 @@ namespace DataAccessLibrary
             set { bodyParameterType = value; }
         }
 
-        private List<Parameter> formParameters;
-        public List<Parameter> FormParameters
+        private List<Variable> formParameters;
+        public List<Variable> FormParameters
         {
             get { return formParameters; }
             set { formParameters = value; }
@@ -73,11 +73,11 @@ namespace DataAccessLibrary
             this.name = "";
             this.method = "GET";
             this.url = "";
-            this.queryParameters = new List<Parameter>();
-            this.headers = new List<Parameter>();
+            this.queryParameters = new List<Variable>();
+            this.headers = new List<Variable>();
             this.bodyParameterType = "TEXT";
             this.textParameter = "";
-            this.formParameters = new List<Parameter>();
+            this.formParameters = new List<Variable>();
         }
 
         public Request(string name, string method, string url)
@@ -86,11 +86,11 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.queryParameters = new List<Parameter>();
-            this.headers = new List<Parameter>();
+            this.queryParameters = new List<Variable>();
+            this.headers = new List<Variable>();
             this.bodyParameterType = "TEXT";
             this.textParameter = "";
-            this.formParameters = new List<Parameter>();
+            this.formParameters = new List<Variable>();
         }
 
         public Request(int id, string name, string method, string url)
@@ -99,11 +99,11 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.queryParameters = new List<Parameter>();
-            this.headers = new List<Parameter>();
+            this.queryParameters = new List<Variable>();
+            this.headers = new List<Variable>();
             this.bodyParameterType = "TEXT";
             this.textParameter = "";
-            this.formParameters = new List<Parameter>();
+            this.formParameters = new List<Variable>();
         }
 
         public Request(int id, string name, string method, string url, string bodyParameterType, string textParameter)
@@ -112,11 +112,11 @@ namespace DataAccessLibrary
             this.name = name;
             this.method = method;
             this.url = url;
-            this.queryParameters = new List<Parameter>();
-            this.headers = new List<Parameter>();
+            this.queryParameters = new List<Variable>();
+            this.headers = new List<Variable>();
             this.bodyParameterType = bodyParameterType;
             this.textParameter = textParameter;
-            this.formParameters = new List<Parameter>();
+            this.formParameters = new List<Variable>();
         }
     }
 }

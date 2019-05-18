@@ -55,13 +55,161 @@ namespace DataAccessLibrary
                 createTable = new SqliteCommand(addRequestHeaderTable, db);
                 createTable.ExecuteReader();
 
+                String addVariableTable = "CREATE TABLE IF NOT EXISTS VARIABLE(" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "name TEXT NOT NULL, " +
+                    "value TEXT" +
+                    ");";
+                createTable = new SqliteCommand(addVariableTable, db);
+                createTable.ExecuteReader();
+
+                db.Close();
+            }
+        }
+
+        public static List<Variable> GetAllVariables()
+        {
+            List<Variable> variables = new List<Variable>();
+
+            using (SqliteConnection db =
+                new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand selectRequestCommand = new SqliteCommand("SELECT id, name, value FROM VARIABLE;", db);
+
+                SqliteDataReader query = selectRequestCommand.ExecuteReader();
+
+                while (query.Read())
+                {
+                    int id = query.GetInt32(0);
+                    string name = query.GetString(1);
+                    string value = query.GetString(2);
+
+                    var variable = new Variable(id, name, value);
+                    variables.Add(variable);
+                }
+
+                db.Close();
+            }
+
+            return variables;
+        }
+
+        private static int InsertVariable(Variable variable)
+        {
+            int newId = -1;
+            using (SqliteConnection db =
+                new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = db;
+                command.CommandText = "INSERT INTO VARIABLE(name, value) VALUES(@name, @value);";
+
+                command.Parameters.AddWithValue("@name", variable.Name);
+                command.Parameters.AddWithValue("@value", variable.Value);
+
+                command.ExecuteReader();
+                newId = getLastRowId(db);
+
+                db.Close();
+            }
+
+            return newId;
+        }
+
+        public static void InsertVariables(List<Variable> variables)
+        {
+            using (SqliteConnection db =
+                new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                foreach(var variable in variables)
+                {
+                    if (variable.Name.Trim().Length == 0)
+                    {
+                        continue;
+                    }
+
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = db;
+                    command.CommandText = "INSERT INTO VARIABLE(name, value) VALUES(@name, @value);";
+
+                    command.Parameters.AddWithValue("@name", variable.Name);
+                    command.Parameters.AddWithValue("@value", variable.Value);
+
+                    command.ExecuteReader();
+                    variable.Id = getLastRowId(db);
+                }
+
+                db.Close();
+            }
+        }
+
+        private static int UpdateVariable(Variable variable)
+        {
+            using (SqliteConnection db =
+                new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = db;
+                command.CommandText = "UPDATE VARIABLE SET name = @name, value = @value WHERE id = @id;";
+
+                command.Parameters.AddWithValue("@id", variable.Id);
+                command.Parameters.AddWithValue("@name", variable.Name);
+                command.Parameters.AddWithValue("@value", variable.Value);
+
+                command.ExecuteReader();
+
+                db.Close();
+            }
+
+            return variable.Id;
+        }
+
+        public static void RemoveAllVariables()
+        {
+            using (SqliteConnection db =
+                new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = db;
+                command.CommandText = "DELETE FROM VARIABLE;";
+                command.ExecuteNonQuery();
+
+                db.Close();
+            }
+        }
+
+        public static void RemoveVariable(Variable variable)
+        {
+            using (SqliteConnection db =
+               new SqliteConnection("Filename=postman.db"))
+            {
+                db.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = db;
+                command.CommandText = "DELETE FROM VARIABLE WHERE id = @id;";
+
+                command.Parameters.AddWithValue("@id", variable.Id);
+
+                command.ExecuteReader();
+
                 db.Close();
             }
         }
 
         public static List<Request> getAllRequest()
         {
-             List<Request> requests = new List<Request>();
+            List<Request> requests = new List<Request>();
 
             using (SqliteConnection db =
                 new SqliteConnection("Filename=postman.db"))
@@ -233,7 +381,6 @@ namespace DataAccessLibrary
             }
         }
 
-
         private static void insertQueryParameters(Request request, int requestId, SqliteConnection db)
         {
             insertParameters("QUERY_PARAMETER", requestId, request.QueryParameters, db);
@@ -250,26 +397,26 @@ namespace DataAccessLibrary
             insertParameters("HEADER", requestId, request.Headers, db);
         }
 
-        private static List<Parameter> getQueryParameters(int requestId, SqliteConnection db)
+        private static List<Variable> getQueryParameters(int requestId, SqliteConnection db)
         {
             return getParameters("QUERY_PARAMETER", requestId, db);
         }
 
-        private static List<Parameter> getFormParameters(int requestId, SqliteConnection db)
+        private static List<Variable> getFormParameters(int requestId, SqliteConnection db)
         {
             return getParameters("FORM_PARAMETER", requestId, db);
         }
 
-        private static List<Parameter> getHeaders(int requestId, SqliteConnection db)
+        private static List<Variable> getHeaders(int requestId, SqliteConnection db)
         {
             return getParameters("HEADER", requestId, db);
         }
 
-        private static List<Parameter> getParameters(string tableName, int requestId, SqliteConnection db)
+        private static List<Variable> getParameters(string tableName, int requestId, SqliteConnection db)
         {
             string queryString = string.Format("SELECT id, name, value FROM {0} WHERE request_id = {1};", tableName, requestId);
             SqliteCommand selectRequestCommand = new SqliteCommand(queryString, db);
-            List<Parameter> parameterList = new List<Parameter>();
+            List<Variable> parameterList = new List<Variable>();
 
             SqliteDataReader query = selectRequestCommand.ExecuteReader();
 
@@ -278,13 +425,13 @@ namespace DataAccessLibrary
                 int id = query.GetInt32(0);
                 string name = query.GetString(1);
                 string value = query.GetString(2);
-                parameterList.Add(new Parameter(id, name, value));
+                parameterList.Add(new Variable(id, name, value));
             }
 
             return parameterList;
         }
 
-        private static void insertParameters(string tableName, int requestId, List<Parameter> parameterList, SqliteConnection db)
+        private static void insertParameters(string tableName, int requestId, List<Variable> parameterList, SqliteConnection db)
         {
             if (parameterList == null || parameterList.Count == 0)
             {

@@ -176,5 +176,10 @@ namespace Postman
 
             return -1;
         }
+
+        private void MoveToEnvironmentVariablePageButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(EnvironmentVariablePage));
+        }
     }
 }

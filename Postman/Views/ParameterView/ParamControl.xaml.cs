@@ -8,32 +8,32 @@ namespace Postman
 {
     public sealed partial class ParamControl : UserControl
     {
-        private List<Parameter> parameterList;
+        private List<Variable> variableList;
 
         public ParamControl()
         {
             this.InitializeComponent();
-            this.parameterList = new List<Parameter>();
+            this.variableList = new List<Variable>();
             this.AddItem(0);
         }
 
 
-        public List<Parameter> Value
+        public List<Variable> Value
         {
             get
             {
-                List<Parameter> result = new List<Parameter>();
+                List<Variable> result = new List<Variable>();
                 var children = this.panel.Children;
                 for (int i = 0; i < children.Count; i++)
                 {
                     var item = (ParamItem)children[i];
-                    var param = item.Value;
-                    if (param == null || param.Name.Trim() == "")
+                    var variable = item.Value;
+                    if (variable == null || variable.Name.Trim() == "")
                     {
                         continue;
                     }
 
-                    result.Add(param);
+                    result.Add(variable);
                 }
 
                 return result;
@@ -45,7 +45,7 @@ namespace Postman
                 var children = this.panel.Children;
                 children.Clear();
 
-                this.parameterList = value;
+                this.variableList = value;
 
                 if (value.Count == 0)
                 {
@@ -67,18 +67,18 @@ namespace Postman
         {
             var children = this.panel.Children;
 
-            var param = new Parameter();
+            var param = new Variable();
             var item = new ParamItem(param);
 
             uint count = Convert.ToUInt32(children.Count);
             if (index == count)
             {
                 children.Add(item);
-                this.parameterList.Add(param);
+                this.variableList.Add(param);
 
             } else {
                 children.Insert(Convert.ToInt32(index), item);
-                this.parameterList.Insert(Convert.ToInt32(index), param);
+                this.variableList.Insert(Convert.ToInt32(index), param);
             }
 
             this.indexItem();
@@ -86,7 +86,7 @@ namespace Postman
 
         public void DeleteItem(uint index)
         {
-            this.parameterList.RemoveAt(Convert.ToInt32(index));
+            this.variableList.RemoveAt(Convert.ToInt32(index));
             this.panel.Children.RemoveAt(Convert.ToInt32(index));
 
             this.indexItem();
