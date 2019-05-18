@@ -8,12 +8,14 @@ using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.ApplicationModel.DataTransfer;
 using System.Threading.Tasks;
+using Windows.Foundation;
 
 namespace Postman
 {
     public sealed partial class MainPage : Page
     {
         private Request currentRequest;
+        private IAsyncAction restRequest;
 
         public MainPage()
         {
@@ -57,7 +59,7 @@ namespace Postman
 
         private void sendButtonClick(object sender, RoutedEventArgs e)
         {
-            ThreadPool.RunAsync((workItem) =>
+            this.restRequest = ThreadPool.RunAsync((workItem) =>
             {
                 Response response = RestClient.SendRequestAsync(this.currentRequest).Result;
                 Dispatcher.RunAsync(CoreDispatcherPriority.High, new DispatchedHandler(() =>
@@ -65,6 +67,8 @@ namespace Postman
                     sendRequestComplete(response);
                 }));
             });
+
+            this.cancelButton.IsEnabled = true;
         }
 
         private void sendRequestComplete(Response response)
@@ -76,7 +80,12 @@ namespace Postman
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            await this.setRequestName();
+            var result = await this.setRequestName();
+            if (result != 0)
+            {
+                return;
+            }
+
             this.SaveRequest();
         }
 
@@ -91,7 +100,7 @@ namespace Postman
             var result = await saveDialog.ShowAsync();
             if (result != ContentDialogResult.Primary)
             {
-                return 0;
+                return -1;
             }
 
             this.currentRequest.Name = saveDialog.Text.Trim();
@@ -180,6 +189,17 @@ namespace Postman
         private void MoveToEnvironmentVariablePageButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(EnvironmentVariablePage));
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.restRequest == null)
+            {
+                return;
+            }
+
+            this.restRequest.Cancel();
+            this.cancelButton.IsEnabled = false;
         }
     }
 }
